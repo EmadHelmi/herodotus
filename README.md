@@ -347,7 +347,7 @@ and the output will be something like this:
 
 ![colorizer ex1](static/imgs/colorizer-ex1.png)
 
-You can also add styles (as noted in the `colored` [package][colored-style-documentation]).
+You can also add styles (as noted in the [`colored`][colored-style-documentation]).
 To do so, just pass your desired styles as a list to the `colorize` function:
 
 ```python
