@@ -82,16 +82,22 @@
 
 ### The history behind the project
 
-Python [logging][python-logging-url] package is a powerful tool for logging your messages into any stream.
-From a file to third party service, like [Elasticsearch][elastic-url].
+The Python [`logging`][python-logging-url] package
+is a powerful tool for logging messages to various streams,
+ranging from files to third-party services like [Elasticsearch][elastic-url].
 
-But one day in a project I needed to log some messages through many streams with different severities.
-For example I want a logger object in which three handlers one for a rotating file handler, one for stdout and one for
-elasticsearch.
-But I wanted to send each severity to a specific stream. And also I wanted to colorize the stdout log but not the one in
-the file.
+However, there was a particular instance in a project
+where I needed to log messages through multiple streams
+with varying levels of severity.
+To illustrate, I aimed to create a logger object
+equipped with three handlers:
+one for a rotating file, one for standard output (stdout), and one for Elasticsearch.
 
-When I used something like this:
+My objective was to route each severity level to a specific stream.
+Additionally, I intended to apply colorization to
+the logs displayed in stdout, while omitting colorization for logs saved in the file.
+
+When I employed code similar to the following:
 
 ```python
 import logging
@@ -104,18 +110,23 @@ my_logger.debug(
 )
 ```
 
-It sends a nice colorized output to the stdout. But an ugly text (with ansi color symbols) sent to the Elasticsearch or
-written in the file. So I decided to make some enhancements on the logging package and also decided to publish it. So
-please fill free to contribute.
+It yielded a visually appealing colorized output on stdout.
+However, when directed to Elasticsearch or written to a file,
+the output appeared unattractive due to the presence of ANSI color symbols.
+Consequently, I embarked on refining the logging package
+and subsequently contemplated making these improvements available for public use.
+If you're interested, I welcome you to contribute to this endeavor.
 
 ### The naming convention
 
-[Herodotus][Herodotus-wiki] was an ancient Greek historian known as the "Father of History."
-He wrote the book "The Histories," one of the earliest historical works.
-This book covers various subjects such as history, geography, cultures, civilizations, and wars.
-He combined accurate descriptions of events with engaging storytelling.
-His work is a blend of historical analysis and cultural narratives, making him a significant figure in the development
-of historical writing.
+[Herodotus][Herodotus-wiki] stands as an ancient Greek historian acclaimed as the "Father of History."
+Renowned for penning the book "The Histories,"
+he holds a position among the earliest contributors
+to historical literature.
+This opus spans an array of topics encompassing history, geography, cultures, civilizations, and conflicts.
+Notably, he adeptly merged meticulous event accounts with captivating narratives.
+His opus presents a fusion of historical scrutiny and cultural storytelling,
+rendering him a pivotal influencer in the evolution of historical writing.
 
 <!-- GETTING STARTED -->
 
@@ -133,11 +144,12 @@ I've also created a pypi package for this library. So you can easily use and ins
 
 ### Basic usage
 
-1. First, you should define a logger object with a specific severity level.
-   by this level setup, the logger will send all severities greater than or equal
-   to.You can read more about severity numbers [here][severity-url].
-   For example, if you define a logger object with `WARNING` level, it does not send any `INFO`, `DEBUG` or `NOTSET`
-   levels to its handlers.
+1. To begin, it's essential to instantiate a logger object with a designated severity level.
+   This configuration dictates that the logger will transmit all severities equal to
+   or surpassing the specified level.
+   Further insight into severity numbers can be found [here][severity-url].
+   For instance, if a logger object is established with a `WARNING` level,
+   it will refrain from dispatching `INFO`, `DEBUG`, or `NOTSET` levels to its associated handlers.
 
    ```python
    import logging
@@ -180,7 +192,7 @@ I've also created a pypi package for this library. So you can easily use and ins
     )
     ```
 
-3. It's finished!! Seat back and just tell your logger object to log!
+3. You're all set! Lean back and simply instruct your logger object to start logging!
     1. Create the `logs` directory:
 
        ```bash
@@ -190,11 +202,11 @@ I've also created a pypi package for this library. So you can easily use and ins
        ```python
        lg.logger.info("Hello")
        ```
-   But at this point, nothing happened.
-   Because the `lg` log level is
-   `logging.WARNING` and we tell to log with `info` level.
-   And we
-   know that `log.INFO` < `log.WARNING`.
+
+   However, at this juncture, no action will transpire.
+   This outcome arises due to the fact that the log level `lg` is established as `logging.WARNING`, while we endeavor to
+   initiate logging with the info level. Evidently, the hierarchy dictates that `log.INFO` holds a lesser value than
+   `log.WARNING`.
 
    Let's try another one:
    ```python
@@ -204,7 +216,8 @@ I've also created a pypi package for this library. So you can easily use and ins
    ```bash
    2023-08-09T10:39:05|test_logger|WARNING|Hello
    ```
-   But nothing logged in the log file. And the reason is clear.
+   However, no logs have been recorded in the log file,
+   and the rationale behind this outcome is evident.
 
    Let's run another example:
    ```python
@@ -214,7 +227,7 @@ I've also created a pypi package for this library. So you can easily use and ins
    ```bash
    2023-08-09T10:45:45|test_logger|CRITICAL|Hello
    ```
-   And finally in the log file located at `logs/test_logfile.log` we have the same output.
+   Consequently, the log file located at `logs/test_logfile.log` mirrors the identical output.
 
 ### Use with a Formatter
 
@@ -258,8 +271,9 @@ lg = logger.Logger(
 )
 ```
 
-The most important note is that you can also set different formatter for each handler.
-But if you don't set a formatter for your handler, the logger will use its formatter for.
+The most important thing to note is that you can also set a different formatter for each handler.
+However, if you don't specify a formatter for your handler,
+the logger will fall back to using its own default formatter.
 
 ```python
 import logging
@@ -296,9 +310,11 @@ lg = logger.Logger(
 
 ### Using the colorizer
 
-Using colors everywhere undoubtedly gives another view, in the logging so.
-You can use `colored` [package][colored-pip-url].
-But I also put some easy to use functions to add colors to your logs.
+Incorporating colors throughout undoubtedly provides a distinctive perspective,
+and this holds true in the context of logging as well.
+One approach is to leverage the `colored` [package][colored-pip-url].
+Additionally, I've included user-friendly functions that facilitate the inclusion of colors within your logs.
+
 Let's see some examples:
 
 ```python
@@ -385,12 +401,17 @@ chars to the colors):
 
 ![colorize ex3](static/imgs/colorizer-ex3.png)
 
-So ugly! So what to do? Don't be worry. I also have a soloution for this.
+Finding the appearance unappealing?
+Wondering what steps to take next?
+No need to fret.
+I've got a solution for you.
 
-You can use the `msg_func` argument for each of `Enhanced*` handlers.
-It has the type of `function` So, you should pass it a function.
-I, for example, have written a `decolorize` function in the `herodotus.utils.colorize` package which get a `str`
-with ansii color chars and remove them:
+You can make use of the `msg_func` argument within each of the `Enhanced*` handlers.
+This argument expects a function as its type,
+so you should provide it with a suitable function.
+As an illustration, I've authored a `decolorize` function
+in the `herodotus.utils.colorize` package.
+This function takes a string containing ANSI color codes and effectively eliminates them:
 
 ```python
 handlers.EnhancedFileHandler(
