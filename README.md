@@ -11,6 +11,7 @@
 -->
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
+[![PyPi][pypi-shield]][pypi-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
@@ -468,6 +469,10 @@ Or send me Email [s.emad.helmi@gmail.com](mailto://s.emad.helmi@gmail.com)
 [issues-shield]: https://img.shields.io/github/issues/EmadHelmi/herodotus?style=for-the-badge
 
 [issues-url]: https://github.com/EmadHelmi/herodotus/issues
+
+[pypi-shield]: https://img.shields.io/pypi/v/herodotus-logger?style=for-the-badge
+
+[pypi-url]: https://pypi.org/project/herodotus-logger/
 
 [license-shield]: https://img.shields.io/github/license/EmadHelmi/herodotus?style=for-the-badge
 
