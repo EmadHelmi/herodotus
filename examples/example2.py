@@ -14,6 +14,12 @@ lg = logger.Logger(
     handlers=[
         handlers.EnhancedStreamHandler(
             stream=stdout,
+            level=logging.ERROR
+        ),
+        handlers.EnhancedFileHandler(
+            filename="logs/test_log.log",
+            mode="a",
+            encoding="utf-8",
             level=logging.WARNING
         )
     ]
