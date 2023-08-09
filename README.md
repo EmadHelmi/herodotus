@@ -312,7 +312,7 @@ lg = logger.Logger(
 
 Incorporating colors throughout undoubtedly provides a distinctive perspective,
 and this holds true in the context of logging as well.
-One approach is to leverage the `colored` [package][colored-pip-url].
+One approach is to leverage the [`colored`][colored-pip-url].
 Additionally, I've included user-friendly functions that facilitate the inclusion of colors within your logs.
 
 Let's see some examples:
