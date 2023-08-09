@@ -1,10 +1,10 @@
 import logging
 from sys import stdout
 
-from src.handlers import EnhancedFileHandler
-from src.handlers import EnhancedStreamHandler
-from src.logger.logger import Logger
-from src.utils.colorizer import colorize, decolorize
+from src.herodotus import EnhancedFileHandler
+from src.herodotus import EnhancedStreamHandler
+from src.herodotus import Logger
+from src.herodotus import colorize, decolorize
 
 test_logger = Logger(
     name="test_logger",
