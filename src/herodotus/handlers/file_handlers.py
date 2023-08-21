@@ -13,18 +13,21 @@ class EnhancedFileHandler(FileHandler):
             delay=False,
             errors=None,
             level: int = 0,
+            strict_level: bool = False,
             formatter: Formatter | None = None,
             msg_func: Callable[[str], str] | None = None):
         super().__init__(filename, mode, encoding, delay, errors)
         self.setFormatter(formatter)
         self.setLevel(level)
+        self.strict_level = strict_level
         self.msg_func = msg_func
 
     def emit(self, record: LogRecord) -> None:
-        modified_record = copy.deepcopy(record)
-        if self.msg_func:
-            modified_record.msg = self.msg_func(modified_record.msg)
-        super().emit(modified_record)
+        if not self.strict_level or record.levelno == self.level:
+            modified_record = copy.deepcopy(record)
+            if self.msg_func:
+                modified_record.msg = self.msg_func(modified_record.msg)
+            super().emit(modified_record)
 
 
 class EnhancedTimedRotatingFileHandler(TimedRotatingFileHandler):
@@ -40,18 +43,21 @@ class EnhancedTimedRotatingFileHandler(TimedRotatingFileHandler):
             atTime=None,
             errors=None,
             level: int = 0,
+            strict_level: bool = False,
             formatter: Formatter | None = None,
             msg_func: Callable[[str], str] | None = None):
         super().__init__(filename, when, interval, backupCount, encoding, delay, utc, atTime, errors)
         self.setFormatter(formatter)
         self.setLevel(level)
+        self.strict_level = strict_level
         self.msg_func = msg_func
 
     def emit(self, record: LogRecord) -> None:
-        modified_record = copy.deepcopy(record)
-        if self.msg_func:
-            modified_record.msg = self.msg_func(modified_record.msg)
-        super().emit(modified_record)
+        if not self.strict_level or record.levelno == self.level:
+            modified_record = copy.deepcopy(record)
+            if self.msg_func:
+                modified_record.msg = self.msg_func(modified_record.msg)
+            super().emit(modified_record)
 
 
 class EnhancedSizeRotatingFileHandler(RotatingFileHandler):
@@ -65,15 +71,18 @@ class EnhancedSizeRotatingFileHandler(RotatingFileHandler):
             delay=False,
             errors=None,
             level: int = 0,
+            strict_level: bool = False,
             formatter: Formatter | None = None,
             msg_func: Callable[[str], str] | None = None):
         super().__init__(filename, mode, maxBytes, backupCount, encoding, delay, errors)
         self.setFormatter(formatter)
         self.setLevel(level)
+        self.strict_level = strict_level
         self.msg_func = msg_func
 
     def emit(self, record: LogRecord) -> None:
-        modified_record = copy.deepcopy(record)
-        if self.msg_func:
-            modified_record.msg = self.msg_func(modified_record.msg)
-        super().emit(modified_record)
+        if not self.strict_level or record.levelno == self.level:
+            modified_record = copy.deepcopy(record)
+            if self.msg_func:
+                modified_record.msg = self.msg_func(modified_record.msg)
+            super().emit(modified_record)

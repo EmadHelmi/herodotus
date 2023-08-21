@@ -19,15 +19,17 @@ lg = logger.Logger(
     handlers=[
         handlers.EnhancedStreamHandler(
             stream=sys.stdout,
-            level=logging.ERROR
+            level=logging.ERROR,
+            strict_level=True
         ),
         handlers.EnhancedFileHandler(
             filename="logs/test_log.log",
             mode="a",
             encoding="utf-8",
-            level=logging.WARNING
+            level=logging.WARNING,
+            strict_level=True
         )
     ]
 )
 
-lg.logger.warning("hello, world")
+lg.logger.error("hello, world")

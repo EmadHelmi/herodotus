@@ -229,6 +229,49 @@ I've also created a pypi package for this library. So you can easily use and ins
    ```
    Consequently, the log file located at `logs/test_logfile.log` mirrors the identical output.
 
+### Use strict levels
+
+What should we do If we want strict logging levels. I mean that
+I want to log to the stream **JUST** the `warning` level and not higher (ex. `error`.)
+It's also simple. You can use `strict_level` parameter and set it `True`:
+
+```python
+import logging
+from sys import stdout
+
+from herodotus import logger
+from herodotus import handlers
+
+lg = logger.Logger(
+    name="test_logger",
+    level=logging.WARNING,
+    formatter=logging.Formatter(
+        datefmt="%Y-%m-%dT%H:%M:%S",
+        fmt="%(asctime)s %(levelname)s: %(message)s"
+    ),
+    handlers=[
+        handlers.EnhancedStreamHandler(
+            stream=sys.stdout,
+            level=logging.ERROR,
+            strict_level=True
+        ),
+        handlers.EnhancedFileHandler(
+            filename="logs/test_log.log",
+            mode="a",
+            encoding="utf-8",
+            level=logging.WARNING,
+            strict_level=True
+        )
+    ]
+)
+
+lg.logger.error("hello, world")
+```
+
+If you don't set the `strict_leve` parameter, you will see the log message
+both in the stdout and the file. But with set it to `True` you don't see the message
+in the file.
+
 ### Use with a Formatter
 
 I define a default formatter for the logger as follow:

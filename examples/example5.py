@@ -1,10 +1,14 @@
 import logging
-from sys import stdout
+import os
+import sys
 
-from herodotus import handlers
-from herodotus import logger
-from herodotus.utils import colorize
+# Add the project root directory to the Python path
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(project_root)
 
+from src.herodotus import handlers
+from src.herodotus import logger
+from src.herodotus.utils import colorize
 from src.herodotus.utils import decolorize
 
 lg = logger.Logger(
@@ -16,7 +20,7 @@ lg = logger.Logger(
     ),
     handlers=[
         handlers.EnhancedStreamHandler(
-            stream=stdout,
+            stream=sys.stdout,
             level=logging.ERROR,
             formatter=logging.Formatter(
                 datefmt="%Y-%m-%dT%H:%M:%S",
