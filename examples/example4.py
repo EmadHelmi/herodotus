@@ -20,10 +20,10 @@ lg = logger.Logger(
     handlers=[
         handlers.EnhancedStreamHandler(
             stream=sys.stdout,
-            level=logging.ERROR,
+            level=logging.WARNING,
             formatter=logging.Formatter(
                 datefmt="%Y-%m-%dT%H:%M:%S",
-                fmt="%(asctime)s | %(levelname)s: | %(message)s"
+                fmt="%(asctime)s | %(levelname)s | %(message)s"
             )
         ),
         handlers.EnhancedFileHandler(
@@ -39,4 +39,4 @@ lg = logger.Logger(
     ]
 )
 
-lg.logger.warning(colorize("Hello", foreground="green", styles=["bold", "underling"]))
+lg.logger.warning(colorize("Hello", foreground="green", styles=["bold", "underline"]))

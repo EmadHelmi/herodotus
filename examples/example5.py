@@ -41,4 +41,4 @@ lg = logger.Logger(
     ]
 )
 
-lg.logger.warning(colorize("Hello", foreground="green", styles=["bold", "underling"]))
+lg.logger.warning(colorize("Hello", foreground="green", styles=["bold", "underline"]))

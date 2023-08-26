@@ -268,7 +268,7 @@ lg = logger.Logger(
 lg.logger.error("hello, world")
 ```
 
-If you don't set the `strict_leve` parameter, you will see the log message
+If you don't set the `strict_level` parameter, you will see the log message
 both in the stdout and the file. But with set it to `True` you don't see the message
 in the file.
 
@@ -439,7 +439,7 @@ lg = logger.Logger(
 lg.logger.critical(colorizer.colorize("Hello", foreground="green"))
 ```
 
-In the log file, you will probably see something like this (If you don't have any plugin or extention to convert ansii
+In the log file, you will probably see something like this (If you don't have any plugin or extension to convert ansii
 chars to the colors):
 
 ![colorize ex3](static/imgs/colorizer-ex3.png)
