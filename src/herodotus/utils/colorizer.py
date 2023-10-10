@@ -1,5 +1,5 @@
 import re as regex
-from typing import List
+from typing import List, Any
 
 from colored import fore, back, style as styler
 from colored.exceptions import InvalidColor, InvalidStyle
@@ -7,7 +7,7 @@ from colored.exceptions import InvalidColor, InvalidStyle
 decolorize_regex = regex.compile(r'\x1b[^m]*m')
 
 
-def colorize(text: str, foreground: str | None = None, background: str | None = None, styles: List[str] | None = None):
+def colorize(text: Any, foreground: str | None = None, background: str | None = None, styles: List[str] | None = None):
     if styles is None:
         styles = []
     try:

@@ -18,6 +18,11 @@ class EnhancedStreamHandler(StreamHandler):
         self.msg_func = msg_func
 
     def emit(self, record: LogRecord) -> None:
+        if not isinstance(record.msg, str):
+            try:
+                record.msg = str(record.msg) or repr(record.msg)
+            except Exception:
+                raise Exception("Cannot convert object of type", type(record.msg), "to string")
         if not self.strict_level or record.levelno == self.level:
             modified_record = copy.deepcopy(record)
             if self.msg_func:
