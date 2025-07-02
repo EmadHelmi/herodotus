@@ -1,93 +1,184 @@
-import copy
-from logging import FileHandler, Formatter, LogRecord
+import datetime
+from logging import FileHandler, Formatter
 from logging.handlers import TimedRotatingFileHandler, RotatingFileHandler
-from typing import Callable
+from typing import Callable, Optional, Tuple
+
+from concurrent_log_handler import ConcurrentRotatingFileHandler, ConcurrentTimedRotatingFileHandler
+
+from src.herodotus.handlers.enhanced_handler import EnhancedHandler
 
 
-class EnhancedFileHandler(FileHandler):
+class EnhancedFileHandler(EnhancedHandler):
     def __init__(
             self,
             filename,
-            mode='a',
-            encoding=None,
-            delay=False,
+            mode: str = "a",
+            maxBytes: int = 0,
+            backupCount: int = 0,
+            encoding: Optional[str] = None,
+            debug: Optional[bool] = False,
+            delay: Optional[bool | None] = None,
+            use_gzip: Optional[bool] = False,
+            owner: Optional[Tuple[str, str]] = None,
+            chmod: Optional[int] = None,
+            umask: Optional[int] = None,
+            newline: Optional[str] = None,
+            terminator: str = "\n",
+            unicode_error_policy: str = "ignore",
+            lock_file_directory: Optional[str] = None,
+            keep_file_open: bool = True,  # New parameter, default to True for better performance            mode='a',
             errors=None,
+            concurrent: bool = False,
             level: int = 0,
             strict_level: bool = False,
             formatter: Formatter | None = None,
             msg_func: Callable[[str], str] | None = None):
-        super().__init__(filename, mode, encoding, delay, errors)
-        self.setFormatter(formatter)
-        self.setLevel(level)
-        self.strict_level = strict_level
-        self.msg_func = msg_func
+        if concurrent:
+            self.handler = ConcurrentRotatingFileHandler(
+                filename,
+                mode=mode,
+                maxBytes=maxBytes,
+                backupCount=backupCount,
+                encoding=encoding,
+                debug=debug,
+                delay=delay,
+                use_gzip=use_gzip,
+                owner=owner,
+                chmod=chmod,
+                umask=umask,
+                newline=newline,
+                terminator=terminator,
+                unicode_error_policy=unicode_error_policy,
+                lock_file_directory=lock_file_directory,
+                keep_file_open=keep_file_open,
+            )
+        else:
+            self.handler = FileHandler(
+                filename,
+                mode=mode,
+                encoding=encoding,
+                delay=False if delay is None else True,
+                errors=errors
+            )
+        super().__init__(concurrent, level, strict_level, formatter, msg_func)
 
-    def emit(self, record: LogRecord) -> None:
-        if not isinstance(record.msg, str):
-            try:
-                record.msg = str(record.msg) or repr(record.msg)
-            except Exception:
-                raise Exception("Cannot convert object of type", type(record.msg), "to string")
-        if not self.strict_level or record.levelno == self.level:
-            modified_record = copy.deepcopy(record)
-            if self.msg_func:
-                modified_record.msg = self.msg_func(modified_record.msg)
-            super().emit(modified_record)
 
-
-class EnhancedTimedRotatingFileHandler(TimedRotatingFileHandler):
+class EnhancedTimedRotatingFileHandler(EnhancedHandler):
     def __init__(
             self,
             filename,
-            when='h',
-            interval=1,
-            backupCount=0,
-            encoding=None,
-            delay=False,
-            utc=False,
-            atTime=None,
-            errors=None,
+            when: str = "h",
+            interval: int = 1,
+            backupCount: int = 0,
+            encoding: Optional[str] = None,
+            delay: bool = False,
+            utc: bool = False,
+            atTime: Optional[datetime.time] = None,
+            errors: Optional[str] = None,
+            maxBytes: int = 0,
+            use_gzip: bool = False,
+            owner: Optional[Tuple[str, str]] = None,
+            chmod: Optional[int] = None,
+            umask: Optional[int] = None,
+            newline: Optional[str] = None,
+            terminator: str = "\n",
+            unicode_error_policy: str = "ignore",
+            lock_file_directory: Optional[str] = None,
+            keep_file_open: bool = True,
+            concurrent=False,
             level: int = 0,
             strict_level: bool = False,
             formatter: Formatter | None = None,
             msg_func: Callable[[str], str] | None = None):
-        super().__init__(filename, when, interval, backupCount, encoding, delay, utc, atTime, errors)
-        self.setFormatter(formatter)
-        self.setLevel(level)
-        self.strict_level = strict_level
-        self.msg_func = msg_func
+        if concurrent:
+            self.handler = ConcurrentTimedRotatingFileHandler(
+                filename,
+                when=when,
+                interval=interval,
+                backupCount=backupCount,
+                encoding=encoding,
+                delay=delay,
+                utc=utc,
+                atTime=atTime,
+                errors=errors,
+                maxBytes=maxBytes,
+                use_gzip=use_gzip,
+                owner=owner,
+                chmod=chmod,
+                umask=umask,
+                newline=newline,
+                terminator=terminator,
+                unicode_error_policy=unicode_error_policy,
+                lock_file_directory=lock_file_directory,
+                keep_file_open=keep_file_open,
+            )
+        else:
+            self.handler = TimedRotatingFileHandler(
+                filename,
+                when=when,
+                interval=interval,
+                backupCount=backupCount,
+                encoding=encoding,
+                delay=delay,
+                utc=utc,
+                atTime=atTime,
+                errors=errors
+            )
+        super().__init__(concurrent, level, strict_level, formatter, msg_func)
 
-    def emit(self, record: LogRecord) -> None:
-        if not self.strict_level or record.levelno == self.level:
-            modified_record = copy.deepcopy(record)
-            if self.msg_func:
-                modified_record.msg = self.msg_func(modified_record.msg)
-            super().emit(modified_record)
 
-
-class EnhancedSizeRotatingFileHandler(RotatingFileHandler):
+class EnhancedSizeRotatingFileHandler(EnhancedHandler):
     def __init__(
             self,
             filename,
-            mode='a',
-            maxBytes=0,
-            backupCount=0,
-            encoding=None,
-            delay=False,
+            mode: str = "a",
+            maxBytes: int = 0,
+            backupCount: int = 0,
+            encoding: Optional[str] = None,
+            debug: bool = False,
+            delay: Optional[bool | None] = None,
+            use_gzip: bool = False,
+            owner: Optional[Tuple[str, str]] = None,
+            chmod: Optional[int] = None,
+            umask: Optional[int] = None,
+            newline: Optional[str] = None,
+            terminator: str = "\n",
+            unicode_error_policy: str = "ignore",
+            lock_file_directory: Optional[str] = None,
+            keep_file_open: bool = True,
             errors=None,
+            concurrent=False,
             level: int = 0,
             strict_level: bool = False,
             formatter: Formatter | None = None,
             msg_func: Callable[[str], str] | None = None):
-        super().__init__(filename, mode, maxBytes, backupCount, encoding, delay, errors)
-        self.setFormatter(formatter)
-        self.setLevel(level)
-        self.strict_level = strict_level
-        self.msg_func = msg_func
-
-    def emit(self, record: LogRecord) -> None:
-        if not self.strict_level or record.levelno == self.level:
-            modified_record = copy.deepcopy(record)
-            if self.msg_func:
-                modified_record.msg = self.msg_func(modified_record.msg)
-            super().emit(modified_record)
+        if concurrent:
+            self.handler = ConcurrentRotatingFileHandler(
+                filename,
+                mode=mode,
+                maxBytes=maxBytes,
+                backupCount=backupCount,
+                encoding=encoding,
+                debug=debug,
+                delay=delay,
+                use_gzip=use_gzip,
+                owner=owner,
+                chmod=chmod,
+                umask=umask,
+                newline=newline,
+                terminator=terminator,
+                unicode_error_policy=unicode_error_policy,
+                lock_file_directory=lock_file_directory,
+                keep_file_open=keep_file_open,
+            )
+        else:
+            self.handler = RotatingFileHandler(
+                filename,
+                mode=mode,
+                maxBytes=maxBytes,
+                backupCount=backupCount,
+                encoding=encoding,
+                delay=False if delay is None else True,
+                errors=errors
+            )
+        super().__init__(concurrent, level, strict_level, formatter, msg_func)
